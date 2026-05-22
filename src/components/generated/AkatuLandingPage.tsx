@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { ArrowRight, Calendar, CheckCircle2, ChevronDown, HeartHandshake, Instagram, Leaf, MapPin, MessageCircle, Phone, Puzzle, Quote, Sprout, Star, Sun } from 'lucide-react';
 import heroSprout from '../../assets/hero-sprout.png';
+import hcWebSolutionsIcon from '../../assets/hc-web-solutions-icon.png';
 import nataliaPhoto from '../../assets/natalia-crop-source.png';
 const palette = {
   teal: '#10B8C5',
@@ -13,6 +14,7 @@ const palette = {
 const PHONE_DISPLAY = '(31) 99559-0050';
 const WHATSAPP_NUMBER = '5531995590050';
 const INSTAGRAM_URL = 'https://www.instagram.com/espacoakatu?igsh=cmJueHJzcHNmazA5';
+const GOOGLE_REVIEWS_URL = 'https://www.google.com/maps/place/?q=place_id:ChIJr3P4RdebpgARJQJGhlPSyT8';
 const ADDRESS_DISPLAY = 'Av. Sebasti\u00e3o de Brito, 805 - Belo Horizonte, MG';
 const MAPS_QUERY = '805 Av. Sebasti\u00e3o de Brito, Belo Horizonte';
 const GOOGLE_MAPS_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(MAPS_QUERY)}`;
@@ -44,6 +46,19 @@ type Professional = {
   image?: string;
   imageAlt?: string;
 };
+type FounderKpi = {
+  label: string;
+  detail: string;
+  color: string;
+} & ({
+  kind: 'number';
+  value: number;
+  prefix?: string;
+  suffix?: string;
+} | {
+  kind: 'text';
+  text: string;
+});
 const professionals = [{
   name: 'Natália Lara',
   role: 'Fundadora e terapeuta ocupacional',
@@ -78,41 +93,47 @@ const professionals = [{
   detail: 'Trabalha oralidade, fala e linguagem com estratégias lúdicas para fortalecer a comunicação em diferentes contextos.'
 }] satisfies Professional[];
 const testimonials = [{
-  quote: 'Aqui eu aprendi que tentar de novo também pode ser divertido.',
-  child: 'L., 7 anos',
+  quote: 'Nota 5,0 nas avaliações públicas do Google.',
+  author: 'Google Reviews',
+  source: 'Ficha pública',
   color: palette.yellow,
-  style: {
-    left: '7%',
-    top: '20%',
-    transform: 'rotate(-7deg)'
-  }
+  tilt: 'lg:-rotate-3',
+  offset: 'lg:translate-y-10'
 }, {
-  quote: 'Eu gosto da sala com brinquedos porque parece que meu corpo entende melhor.',
-  child: 'B., 5 anos',
+  quote: 'Famílias destacam cuidado acolhedor e atenção no atendimento.',
+  author: 'Destaque das avaliações',
+  source: 'Google Reviews',
   color: palette.teal,
-  style: {
-    right: '8%',
-    top: '8%',
-    transform: 'rotate(5deg)'
-  }
+  tilt: 'lg:rotate-2',
+  offset: 'lg:-translate-y-4'
 }, {
-  quote: 'Quando eu consigo falar o que sinto, fica mais fácil brincar.',
-  child: 'M., 8 anos',
+  quote: 'O espaço aparece como uma clínica infantil bem avaliada por responsáveis.',
+  author: 'Avaliação pública',
+  source: 'Google Reviews',
   color: palette.coral,
-  style: {
-    left: '29%',
-    bottom: '10%',
-    transform: 'rotate(3deg)'
-  }
+  tilt: 'lg:-rotate-1',
+  offset: 'lg:translate-y-16'
 }, {
-  quote: 'Minha sementinha virou uma árvore grande no desenho.',
-  child: 'T., 6 anos',
+  quote: 'A equipe multidisciplinar é apresentada como ponto forte da experiência.',
+  author: 'Destaque das avaliações',
+  source: 'Google Reviews',
   color: palette.yellow,
-  style: {
-    right: '25%',
-    bottom: '22%',
-    transform: 'rotate(-5deg)'
-  }
+  tilt: 'lg:rotate-3',
+  offset: 'lg:translate-y-2'
+}, {
+  quote: 'Atendimento infantil com terapia ocupacional, fonoaudiologia e psicologia.',
+  author: 'Espaço Akatu',
+  source: 'Google Maps',
+  color: palette.teal,
+  tilt: 'lg:-rotate-2',
+  offset: 'lg:translate-y-12'
+}, {
+  quote: 'Avaliações reais podem ser conferidas diretamente na ficha do Google.',
+  author: 'Fonte pública',
+  source: 'Google Reviews',
+  color: palette.coral,
+  tilt: 'lg:rotate-1',
+  offset: 'lg:-translate-y-2'
 }];
 const specialties = [{
   type: 'occupation',
@@ -154,6 +175,33 @@ const clinicSpaces = [{
   text: 'Uma estrutura pensada para receber crianças e responsáveis com previsibilidade e cuidado.',
   color: palette.teal
 }];
+const founderKpis = [{
+  kind: 'number',
+  value: 6,
+  prefix: '+',
+  label: 'anos de experiência',
+  detail: 'na área de desenvolvimento infantil',
+  color: palette.teal
+}, {
+  kind: 'text',
+  text: 'Certificada',
+  label: 'em desenvolvimento infantil',
+  detail: 'formação focada em cuidado, rotina e autonomia',
+  color: palette.yellow
+}, {
+  kind: 'number',
+  value: 97,
+  prefix: '+',
+  label: 'crianças atendidas',
+  detail: 'com escuta e planos individualizados',
+  color: palette.coral
+}] satisfies FounderKpi[];
+const founderCarePoints = ['Planos terapêuticos individualizados', 'Devolutivas claras para os pais', 'Ambientes preparados para o brincar terapêutico'];
+const founderKpiLayouts = [
+  'xl:absolute xl:left-[3%] xl:top-8 xl:w-[300px] xl:-rotate-3',
+  'xl:absolute xl:left-[37%] xl:top-0 xl:w-[310px] xl:rotate-2',
+  'xl:absolute xl:right-[3%] xl:top-10 xl:w-[340px] xl:-rotate-2'
+];
 const contact = [{
   icon: MapPin,
   text: ADDRESS_DISPLAY,
@@ -367,7 +415,7 @@ function ProfessionalVisual({
           </div>}
       </div>
       <figcaption className="relative mt-4 flex items-center justify-between gap-4 px-1">
-        <span className="text-[11px] font-black uppercase tracking-[0.24em] text-neutral-500">{person.role}</span>
+        <span className="text-xs font-black uppercase tracking-[0.2em] text-neutral-500">{person.role}</span>
         <span className="h-4 w-4 rounded-full border-2 border-[#25212B]" style={{
         backgroundColor: person.color
       }} />
@@ -396,10 +444,10 @@ function ProfessionalSpotlight({
         <p className="mt-4 text-base font-black uppercase tracking-[0.18em] text-[#25212B]">
           {person.role}
         </p>
-        <p className="mt-7 max-w-xl text-xl font-extrabold leading-8 text-[#25212B]">
+        <p className="mt-7 max-w-xl text-xl font-extrabold leading-9 text-pretty text-[#25212B]">
           {person.focus}
         </p>
-        <p className="mt-5 max-w-xl text-base font-medium leading-8 text-neutral-600">
+        <p className="mt-5 max-w-xl text-lg font-medium leading-8 text-pretty text-neutral-600">
           {person.detail}
         </p>
         <a href={makeWhatsAppUrl(`Olá, quero conhecer o perfil de ${person.name}.`)} target="_blank" rel="noreferrer" className="mt-8 inline-flex min-h-11 items-center gap-3 rounded-full border-2 border-[#25212B] bg-white px-5 py-3 text-sm font-black text-[#25212B] shadow-[5px_5px_0_#25212B] transition-transform hover:-translate-y-1 active:scale-[0.96]" style={{
@@ -432,28 +480,175 @@ function SeedHero() {
     </div>;
 }
 function FounderIllustration() {
-  return <div className="relative min-h-[540px] overflow-hidden rounded-[42px] border-4 border-[#25212B] bg-[#FFFDF8] p-8 shadow-[12px_12px_0_#10B8C5]">
-      <GeoBlock className="akatu-float absolute right-8 top-8" />
-      <div className="absolute left-10 top-16 h-28 w-28 rounded-full border-4 border-[#25212B] bg-[#FFD83D]" />
-      <div className="absolute left-1/2 top-16 h-[330px] w-[330px] -translate-x-1/2 overflow-hidden rounded-full border-4 border-[#25212B] bg-[#10B8C5] shadow-[10px_10px_0_#25212B]">
+  return <div className="akatu-founder-card-enter relative min-h-[430px] self-center overflow-hidden rounded-[42px] border-4 border-[#25212B] bg-[#FFFDF8] p-8 shadow-[12px_12px_0_#10B8C5] sm:min-h-[500px]">
+      <div className="akatu-float absolute right-8 top-8 h-16 w-16 rounded-[22px] border-4 border-[#25212B] bg-[#EF5B36]" aria-hidden="true" />
+      <div className="absolute left-10 top-16 h-24 w-24 rounded-full border-4 border-[#25212B] bg-[#FFD83D]" aria-hidden="true" />
+      <div className="absolute bottom-32 right-10 h-16 w-16 rounded-full border-4 border-[#25212B] bg-[#10B8C5]" aria-hidden="true" />
+      <div className="absolute left-1/2 top-12 h-[260px] w-[260px] -translate-x-1/2 overflow-hidden rounded-full border-4 border-[#25212B] bg-[#10B8C5] shadow-[10px_10px_0_#25212B] sm:top-14 sm:h-[320px] sm:w-[320px]">
         <img
           src={nataliaPhoto}
           alt="Natália Lara, fundadora da Akatu"
           className="absolute inset-0 h-full w-full object-cover object-[52%_42%]"
         />
       </div>
-      <div className="absolute inset-x-8 bottom-8 rounded-3xl border-4 border-[#25212B] bg-white p-6 shadow-[8px_8px_0_#EF5B36]">
+      <div className="absolute inset-x-5 bottom-5 rounded-3xl border-4 border-[#25212B] bg-white p-4 shadow-[8px_8px_0_#EF5B36] sm:inset-x-8 sm:bottom-8 sm:p-6">
         <p className="text-xs font-extrabold uppercase tracking-[0.24em] text-[#10B8C5]">fundadora</p>
-        <h3 className="mt-3 text-3xl font-extrabold tracking-tight text-[#25212B]">Natália Lara</h3>
-        <p className="mt-3 text-sm font-medium leading-6 text-neutral-600">
+        <h3 className="mt-3 text-2xl font-extrabold tracking-tight text-[#25212B] sm:text-3xl">Natália Lara</h3>
+        <p className="mt-3 text-sm font-medium leading-6 text-pretty text-neutral-600 sm:text-base sm:leading-7">
           Fundadora da Akatu, terapeuta ocupacional e defensora de uma infância acompanhada com técnica, afeto e inclusão.
         </p>
       </div>
     </div>;
 }
+function AnimatedCounter({
+  value,
+  start,
+  prefix = '',
+  suffix = '',
+  label
+}: {
+  value: number;
+  start: boolean;
+  prefix?: string;
+  suffix?: string;
+  label: string;
+}) {
+  const [displayValue, setDisplayValue] = useState(0);
+
+  useEffect(() => {
+    if (!start) {
+      return;
+    }
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setDisplayValue(value);
+      return;
+    }
+
+    let frameId: number;
+    const startedAt = performance.now();
+    const duration = 1300;
+
+    const animate = (now: number) => {
+      const progress = Math.min((now - startedAt) / duration, 1);
+      const easedProgress = 1 - Math.pow(1 - progress, 3);
+
+      setDisplayValue(Math.round(value * easedProgress));
+
+      if (progress < 1) {
+        frameId = window.requestAnimationFrame(animate);
+      }
+    };
+
+    setDisplayValue(0);
+    frameId = window.requestAnimationFrame(animate);
+
+    return () => window.cancelAnimationFrame(frameId);
+  }, [start, value]);
+
+  return <span className="inline-flex items-baseline tabular-nums">
+      <span className="sr-only">{`${prefix}${value}${suffix} ${label}`}</span>
+      <span aria-hidden="true">{prefix}</span>
+      <span aria-hidden="true">{displayValue}</span>
+      <span aria-hidden="true">{suffix}</span>
+    </span>;
+}
+function AnimatedLetters({
+  text,
+  start,
+  className = '',
+  delay = 0
+}: {
+  text: string;
+  start: boolean;
+  className?: string;
+  delay?: number;
+}) {
+  const words = text.split(' ');
+  let letterIndex = 0;
+
+  return <span className={className}>
+      <span className="sr-only">{text}</span>
+      <span aria-hidden="true">
+        {words.map((word, wordIndex) => <span key={`${word}-${wordIndex}`} className="inline-block whitespace-nowrap" style={wordIndex < words.length - 1 ? {
+        marginRight: '0.32em'
+      } : undefined}>
+            {Array.from(word).map((char, charIndex) => {
+          const currentIndex = letterIndex;
+          letterIndex += 1;
+          return <span key={`${char}-${charIndex}`} className={start ? 'akatu-letter-pop' : 'akatu-letter-hidden'} style={start ? {
+            animationDelay: `${delay + currentIndex * 28}ms`
+          } : undefined}>
+                {char}
+              </span>;
+        })}
+          </span>)}
+      </span>
+    </span>;
+}
+function FounderKpiCard({
+  item,
+  index,
+  className = ''
+}: {
+  item: FounderKpi;
+  index: number;
+  className?: string;
+}) {
+  const cardRef = useRef<HTMLElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const card = cardRef.current;
+
+    if (!card) {
+      return;
+    }
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
+      setIsVisible(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setIsVisible(true);
+        observer.disconnect();
+      }
+    }, {
+      threshold: 0.32
+    });
+
+    observer.observe(card);
+
+    return () => observer.disconnect();
+  }, []);
+
+  const valueText = item.kind === 'number' ? `${item.prefix ?? ''}${item.value}${item.suffix ?? ''}` : item.text;
+
+  return <article ref={cardRef} data-founder-kpi={item.label} aria-label={`${valueText} ${item.label}. ${item.detail}`} className={`rounded-[28px] border-4 border-[#25212B] bg-white p-5 transition-[opacity,transform,filter] duration-700 ease-[cubic-bezier(0.2,0,0,1)] will-change-transform hover:z-20 hover:-translate-y-2 ${isVisible ? 'translate-y-0 scale-100 opacity-100 blur-0' : 'translate-y-8 scale-[0.96] opacity-0 blur-[4px]'} ${className}`} style={{
+    boxShadow: `7px 7px 0 ${item.color}`,
+    transitionDelay: isVisible ? `${index * 130}ms` : '0ms'
+  }}>
+      <div className="flex items-center justify-between gap-3">
+        <span className="rounded-full border-2 border-[#25212B] bg-[#FFFDF8] px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-[#25212B]">kpi 0{index + 1}</span>
+        <span className="h-4 w-4 rounded-full border-2 border-[#25212B]" style={{
+        backgroundColor: item.color
+      }} aria-hidden="true" />
+      </div>
+      <div className="mt-4 flex min-h-[46px] items-end text-[30px] font-black leading-none tracking-tight text-[#25212B] sm:text-[32px] xl:text-[34px]">
+        {item.kind === 'number' ? <AnimatedCounter value={item.value} start={isVisible} prefix={item.prefix} suffix={item.suffix} label={item.label} /> : <AnimatedLetters text={item.text} start={isVisible} className="text-[27px] xl:text-[31px]" />}
+      </div>
+      <h3 className="mt-3 text-[13px] font-black uppercase leading-5 tracking-[0.12em] text-[#25212B]">
+        <AnimatedLetters text={item.label} start={isVisible} delay={160} />
+      </h3>
+      <p className="mt-2 text-[15px] font-semibold leading-6 text-pretty text-neutral-600 sm:text-base sm:leading-7">{item.detail}</p>
+    </article>;
+}
 export const AkatuLandingPage = () => {
   const professionalsSectionRef = useRef<HTMLElement>(null);
   const [activeProfessionalIndex, setActiveProfessionalIndex] = useState(0);
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
   const activeProfessional = professionals[activeProfessionalIndex] ?? professionals[0];
 
   useEffect(() => {
@@ -526,7 +721,7 @@ export const AkatuLandingPage = () => {
     });
   };
 
-  return <div className="min-h-screen w-full bg-[#FFFDF8] font-['Poppins',sans-serif] text-[#25212B]">
+  return <div className="min-h-screen w-full bg-[#FFFDF8] font-['Poppins',sans-serif] text-[#25212B] antialiased">
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap');
         * { scrollbar-width: thin; scrollbar-color: #10B8C5 transparent; }
@@ -541,6 +736,13 @@ export const AkatuLandingPage = () => {
         .akatu-spin-slow { animation: akatu-spin 14s linear infinite; }
         .akatu-professional-enter { animation: akatu-professional-enter 420ms cubic-bezier(0.2, 0, 0, 1) both; }
         .akatu-whatsapp-bounce { animation: akatu-whatsapp-bounce 2.4s ease-in-out infinite; }
+        .akatu-founder-card-enter { animation: akatu-founder-card-enter 640ms cubic-bezier(0.2, 0, 0, 1) both; }
+        .akatu-review-carousel:hover .akatu-review-track, .akatu-review-carousel:focus-within .akatu-review-track { animation-play-state: paused; }
+        .akatu-review-track { animation: akatu-review-marquee 34s linear infinite; }
+        .akatu-letter-hidden { display: inline-block; opacity: 0; transform: translateY(8px); }
+        .akatu-letter-pop { display: inline-block; animation: akatu-letter-pop 520ms cubic-bezier(0.2, 0, 0, 1) both; }
+        .akatu-faq-panel { display: grid; transition: grid-template-rows 320ms cubic-bezier(0.2, 0, 0, 1), opacity 220ms ease-out; }
+        .akatu-faq-answer { transition: transform 320ms cubic-bezier(0.2, 0, 0, 1), filter 320ms cubic-bezier(0.2, 0, 0, 1); }
         @media (max-width: 1023px) {
           .akatu-professionals-section { min-height: auto !important; }
           .akatu-professionals-sticky { position: relative; top: auto; min-height: auto; overflow: visible; }
@@ -552,13 +754,16 @@ export const AkatuLandingPage = () => {
         @keyframes akatu-spin { to { rotate: 360deg; } }
         @keyframes akatu-professional-enter { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes akatu-whatsapp-bounce { 0%, 100% { translate: 0 0; } 50% { translate: 0 -10px; } }
-        @media (prefers-reduced-motion: reduce) { .akatu-bounce, .akatu-float, .akatu-float-slow, .akatu-wiggle, .akatu-hop, .akatu-spin-slow, .akatu-professional-enter, .akatu-whatsapp-bounce { animation: none; } }
+        @keyframes akatu-founder-card-enter { from { opacity: 0; transform: translateY(18px) rotate(-1deg); filter: blur(4px); } to { opacity: 1; transform: translateY(0) rotate(0); filter: blur(0); } }
+        @keyframes akatu-review-marquee { from { transform: translate3d(-50%, 0, 0); } to { transform: translate3d(0, 0, 0); } }
+        @keyframes akatu-letter-pop { from { opacity: 0; transform: translateY(8px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        @media (prefers-reduced-motion: reduce) { .akatu-bounce, .akatu-float, .akatu-float-slow, .akatu-wiggle, .akatu-hop, .akatu-spin-slow, .akatu-professional-enter, .akatu-whatsapp-bounce, .akatu-founder-card-enter, .akatu-review-track, .akatu-letter-pop { animation: none; } .akatu-letter-hidden, .akatu-letter-pop { opacity: 1; transform: none; } .akatu-faq-panel, .akatu-faq-answer { transition: none; } }
       `}</style>
 
       <div className="relative min-h-screen w-full overflow-x-clip bg-[#FFFDF8]">
         <PatternRail />
-        <a href={scheduleUrl} target="_blank" rel="noreferrer" aria-label="Conversar com a Akatu pelo WhatsApp" className="akatu-whatsapp-bounce fixed bottom-5 right-5 z-50 grid h-16 w-16 place-items-center rounded-full border-4 border-[#25212B] bg-[#10B8C5] text-white shadow-[6px_6px_0_#FFD83D] transition-transform hover:-translate-y-1 focus:outline-none focus-visible:ring-4 focus-visible:ring-[#10B8C5]/40 active:scale-[0.96] sm:bottom-8 sm:right-8 sm:h-[72px] sm:w-[72px]">
-          <MessageCircle className="h-8 w-8" strokeWidth={2.6} />
+        <a href={scheduleUrl} target="_blank" rel="noreferrer" aria-label="Conversar com a Akatu pelo WhatsApp" className="akatu-whatsapp-bounce fixed bottom-5 right-5 z-50 grid h-[76px] w-[76px] place-items-center rounded-full border-4 border-[#25212B] bg-[#10B8C5] text-white shadow-[7px_7px_0_#FFD83D] transition-transform hover:-translate-y-1 focus:outline-none focus-visible:ring-4 focus-visible:ring-[#10B8C5]/40 active:scale-[0.96] sm:bottom-8 sm:right-8 sm:h-[86px] sm:w-[86px]">
+          <MessageCircle className="h-10 w-10 sm:h-11 sm:w-11" strokeWidth={2.6} />
         </a>
 
         <header className="relative z-20 mx-auto flex w-full max-w-[1180px] items-center justify-between gap-5 px-5 py-8 sm:px-10">
@@ -584,12 +789,12 @@ export const AkatuLandingPage = () => {
                 <div className="grid h-12 w-12 place-items-center rounded-2xl border-2 border-[#25212B] bg-[#10B8C5]">
                   <Leaf className="h-6 w-6 text-white" />
                 </div>
-                <span className="text-sm font-extrabold text-[#25212B]">Desenvolvendo sementes para um mundo inclusivo e feliz.</span>
+                <span className="text-base font-extrabold leading-6 text-[#25212B]">Desenvolvendo sementes para um mundo inclusivo e feliz.</span>
               </div>
               <h1 className="max-w-3xl text-[52px] font-black leading-[0.92] tracking-tight text-[#25212B] sm:text-[64px] lg:text-[78px] lg:leading-[0.9]">
                 Um espaço vivo para a infância florescer.
               </h1>
-              <p className="mt-8 max-w-2xl text-xl font-medium leading-8 text-neutral-600">
+              <p className="mt-8 max-w-2xl text-xl font-medium leading-9 text-pretty text-neutral-600">
                 Terapia ocupacional, fonoaudiologia e psicologia em uma clínica infantil acolhedora, técnica e cheia de imaginação.
               </p>
               <div className="mt-10 flex flex-wrap items-center gap-5">
@@ -609,7 +814,7 @@ export const AkatuLandingPage = () => {
                     <div className="text-[25px] font-black leading-[1.02] tracking-tight text-[#25212B]">
                       {specialty.lines.map(line => <span key={line} className="block">{line}</span>)}
                     </div>
-                    <div className="mt-3 max-w-[210px] text-[11px] font-extrabold uppercase leading-[1.35] tracking-wide text-neutral-500">{specialty.label}</div>
+                    <div className="mt-3 max-w-[210px] text-[13px] font-extrabold uppercase leading-5 tracking-[0.08em] text-neutral-500">{specialty.label}</div>
                   </div>
                 </div>)}
             </div>
@@ -622,7 +827,7 @@ export const AkatuLandingPage = () => {
                 <h2 className="mt-7 text-5xl font-black leading-tight tracking-tight text-white">
                   Cuidado clínico com linguagem de brincar.
                 </h2>
-                <p className="mt-6 text-lg font-medium leading-8 text-white">
+                <p className="mt-6 text-xl font-medium leading-9 text-pretty text-white">
                   A Akatu nasce para apoiar o desenvolvimento infantil com escuta, ciência e delicadeza. Cada criança é vista como uma semente única: precisa de solo seguro, rotina possível e vínculos fortes.
                 </p>
               </div>
@@ -638,7 +843,7 @@ export const AkatuLandingPage = () => {
                       <div>
                         <div className="text-xs font-black uppercase tracking-[0.22em] text-neutral-400">valor 0{index + 1}</div>
                         <h3 className="mt-1 text-2xl font-black tracking-tight text-[#25212B]">{value.title}</h3>
-                        <p className="mt-2 text-base font-medium leading-7 text-neutral-600">{value.text}</p>
+                        <p className="mt-2 text-[17px] font-medium leading-8 text-pretty text-neutral-600">{value.text}</p>
                       </div>
                     </div>;
               })}
@@ -659,7 +864,7 @@ export const AkatuLandingPage = () => {
                     </h2>
                   </div>
                   <div className="lg:justify-self-end">
-                    <p className="max-w-md text-base font-medium leading-7 text-neutral-600">
+                    <p className="max-w-md text-lg font-medium leading-8 text-pretty text-neutral-600">
                       Especialistas que constroem objetivos em conjunto, com devolutivas claras para pais, escola e rede de apoio.
                     </p>
                     <div className="mt-5 flex flex-wrap gap-2" aria-label="Navegar entre profissionais">
@@ -678,27 +883,35 @@ export const AkatuLandingPage = () => {
             </div>
           </section>
 
-          <section id="fundadora" className="border-y-4 border-[#25212B] bg-[#FFD83D]">
-            <div className="mx-auto grid max-w-[1180px] grid-cols-1 gap-12 px-10 py-24 lg:grid-cols-[0.95fr_1.05fr]">
+          <section id="fundadora" className="relative overflow-hidden border-y-4 border-[#25212B] bg-[#FFD83D]">
+            <div className="pointer-events-none absolute left-8 top-14 h-20 w-20 rounded-full border-4 border-[#25212B] bg-[#10B8C5]" aria-hidden="true" />
+            <div className="akatu-wiggle pointer-events-none absolute bottom-16 right-12 hidden h-20 w-20 rounded-[26px] border-4 border-[#25212B] bg-white lg:block" aria-hidden="true" />
+            <div className="mx-auto grid max-w-[1180px] grid-cols-1 items-center gap-10 px-5 py-20 sm:px-10 lg:grid-cols-[0.88fr_1.12fr] lg:py-20">
               <FounderIllustration />
               <div className="self-center">
                 <SectionLabel>página da fundadora</SectionLabel>
-                <h2 className="mt-7 text-5xl font-black leading-tight tracking-tight text-[#25212B]">
+                <h2 className="mt-7 max-w-2xl text-4xl font-black leading-tight tracking-tight text-[#25212B] sm:text-5xl">
                   Uma clínica criada para aproximar ciência, família e infância.
                 </h2>
-                <p className="mt-7 text-lg font-medium leading-8 text-neutral-700">
+                <p className="mt-6 max-w-2xl text-lg font-medium leading-8 text-pretty text-neutral-700 sm:text-xl sm:leading-9">
                   A fundadora da Akatu acredita que o desenvolvimento infantil acontece melhor quando a criança se sente segura, a família entende o processo e a equipe trabalha de forma integrada.
                 </p>
-                <div className="mt-8 grid gap-4">
-                  {['Planos terapêuticos individualizados', 'Devolutivas claras para os pais', 'Ambientes preparados para o brincar terapêutico'].map((item, index) => <div key={item} className="flex items-center gap-4 rounded-3xl border-4 border-[#25212B] bg-white px-5 py-4 shadow-[6px_6px_0_#25212B]">
+                <div className="mt-7 flex flex-wrap gap-3" aria-label="Bases do cuidado da fundadora">
+                  {founderCarePoints.map((item, index) => <div key={item} className="inline-flex min-h-12 items-center gap-3 rounded-full border-2 border-[#25212B] bg-white px-4 py-2 shadow-[4px_4px_0_#25212B]">
                       <div className="grid h-11 w-11 place-items-center rounded-2xl border-2 border-[#25212B]" style={{
                     backgroundColor: [palette.teal, palette.coral, '#FFFFFF'][index]
                   }}>
                         <CheckCircle2 className="h-6 w-6 text-[#25212B]" />
                       </div>
-                      <span className="text-sm font-extrabold text-[#25212B]">{item}</span>
+                      <span className="text-sm font-extrabold leading-5 text-[#25212B] sm:text-base sm:leading-6">{item}</span>
                     </div>)}
                 </div>
+              </div>
+              <div className="relative mt-2 grid gap-4 sm:grid-cols-3 lg:col-span-2 xl:block xl:min-h-[285px]" aria-label="Indicadores da fundadora">
+                <div className="akatu-float pointer-events-none absolute left-[2%] top-0 hidden h-12 w-12 rounded-full border-4 border-[#25212B] bg-[#EF5B36] xl:block" aria-hidden="true" />
+                <div className="akatu-float-slow pointer-events-none absolute bottom-9 right-[20%] hidden h-14 w-14 rounded-[20px] border-4 border-[#25212B] bg-[#10B8C5] xl:block" aria-hidden="true" />
+                <div className="pointer-events-none absolute left-[47%] top-[52%] hidden h-20 w-20 rounded-full border-4 border-[#25212B] bg-[#FFFDF8] xl:block" aria-hidden="true" />
+                {founderKpis.map((item, index) => <FounderKpiCard key={item.label} item={item} index={index} className={founderKpiLayouts[index] ?? ''} />)}
               </div>
             </div>
           </section>
@@ -708,30 +921,45 @@ export const AkatuLandingPage = () => {
             <GeoBlock className="akatu-wiggle absolute right-20 top-24" />
             <div className="relative mx-auto max-w-[1180px]">
               <div className="mx-auto max-w-2xl text-center">
-                <SectionLabel>depoimentos</SectionLabel>
+                <SectionLabel>avaliações</SectionLabel>
                 <h2 className="mt-7 text-5xl font-black leading-tight tracking-tight text-[#25212B]">
-                  Pequenas falas, grandes conquistas.
+                  O que as famílias percebem na Akatu.
                 </h2>
-                <p className="mt-5 text-lg font-medium leading-8 text-neutral-600">
-                  Cards soltos no espaço criam uma sensação de brincadeira, sem perder a leitura limpa para os pais.
+                <p className="mt-5 text-xl font-medium leading-9 text-pretty text-neutral-600">
+                  Cards em movimento trazem destaques da ficha pública no Google, mantendo a leitura leve e o clima de brincadeira.
                 </p>
+                <a href={GOOGLE_REVIEWS_URL} target="_blank" rel="noreferrer" className="mt-7 inline-flex min-h-11 items-center gap-2 rounded-full border-2 border-[#25212B] bg-[#FFD83D] px-5 py-3 text-sm font-black text-[#25212B] shadow-[5px_5px_0_#25212B] transition-transform hover:-translate-y-1 focus:outline-none focus-visible:ring-4 focus-visible:ring-[#10B8C5]/40 active:scale-[0.96]">
+                  Ver reviews no Google <ArrowRight className="h-4 w-4" />
+                </a>
               </div>
-              <div className="relative mt-10 h-[500px]">
-                <div className="akatu-bounce absolute left-1/2 top-1/2 grid h-52 w-52 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-4 border-[#25212B] bg-[#10B8C5] shadow-[8px_8px_0_#25212B]">
+              <div className="akatu-review-carousel relative -mx-10 mt-10 overflow-hidden py-16" aria-label="Carrossel de avaliações do Google">
+                <div className="akatu-bounce pointer-events-none absolute left-1/2 top-1/2 z-0 hidden h-52 w-52 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-4 border-[#25212B] bg-[#10B8C5] shadow-[8px_8px_0_#25212B] lg:grid">
                   <MessageCircle className="h-20 w-20 text-white" strokeWidth={2.2} />
                 </div>
-                {testimonials.map(item => <article key={item.child} className="absolute max-w-[330px] rounded-[30px] border-4 border-[#25212B] bg-white p-6 shadow-[8px_8px_0_#25212B] transition hover:z-10 hover:-translate-y-2" style={{
-                ...item.style,
-                boxShadow: `8px 8px 0 ${item.color}`
-              }}>
-                    <div className="grid h-12 w-12 place-items-center rounded-2xl border-2 border-[#25212B]" style={{
-                  backgroundColor: item.color
-                }}>
-                      <Quote className="h-6 w-6 text-[#25212B]" />
-                    </div>
-                    <p className="mt-4 text-base font-semibold leading-7 text-[#25212B]">{item.quote}</p>
-                    <p className="mt-5 text-sm font-black uppercase tracking-widest text-neutral-500">{item.child}</p>
-                  </article>)}
+                <div className="akatu-review-track relative z-10 flex w-max items-start gap-7 px-10">
+                  {[...testimonials, ...testimonials].map((item, index) => {
+                  const isDuplicate = index >= testimonials.length;
+                  const cardIndex = index % testimonials.length;
+
+                  return <article key={`${item.author}-${index}`} aria-hidden={isDuplicate} className={`w-[300px] shrink-0 rounded-[30px] border-4 border-[#25212B] bg-white p-6 shadow-[8px_8px_0_#25212B] transition-transform hover:z-20 hover:-translate-y-2 focus-within:z-20 sm:w-[345px] ${item.offset} ${item.tilt}`} style={{
+                    boxShadow: `8px 8px 0 ${item.color}`
+                  }}>
+                        <div className="flex items-center justify-between gap-4">
+                          <div className="grid h-12 w-12 place-items-center rounded-2xl border-2 border-[#25212B]" style={{
+                        backgroundColor: item.color
+                      }}>
+                            <Quote className="h-6 w-6 text-[#25212B]" />
+                          </div>
+                          <span className="rounded-full border-2 border-[#25212B] bg-[#FFFDF8] px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-[#25212B]">review 0{cardIndex + 1}</span>
+                        </div>
+                        <p className="mt-4 min-h-[128px] text-lg font-semibold leading-8 text-pretty text-[#25212B]">{item.quote}</p>
+                        <div className="mt-5 flex items-center justify-between gap-4">
+                          <p className="text-sm font-black uppercase tracking-[0.12em] text-neutral-500">{item.author}</p>
+                          <p className="text-xs font-black uppercase tracking-[0.16em] text-[#EF5B36]">{item.source}</p>
+                        </div>
+                      </article>;
+                })}
+                </div>
               </div>
             </div>
           </section>
@@ -743,7 +971,7 @@ export const AkatuLandingPage = () => {
                 <h2 className="mt-7 max-w-2xl text-4xl font-black leading-tight tracking-tight text-white sm:text-5xl">
                   Uma estrutura viva para avaliar, brincar e orientar.
                 </h2>
-                <p className="mt-6 max-w-xl text-lg font-medium leading-8 text-white">
+                <p className="mt-6 max-w-xl text-xl font-medium leading-9 text-pretty text-white">
                   O espaço da Akatu foi pensado para receber crianças e famílias com salas preparadas, materiais terapêuticos e ambientes que ajudam cada atendimento a ter objetivo claro.
                 </p>
                 <div className="mt-9 grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -756,7 +984,7 @@ export const AkatuLandingPage = () => {
                           <Icon className="h-6 w-6 text-[#25212B]" strokeWidth={2.4} />
                         </div>
                         <h3 className="mt-4 text-lg font-black leading-tight text-[#25212B]">{item.title}</h3>
-                        <p className="mt-3 text-sm font-medium leading-6 text-neutral-600">{item.text}</p>
+                        <p className="mt-3 text-base font-medium leading-7 text-pretty text-neutral-600">{item.text}</p>
                       </article>;
                 })}
                 </div>
@@ -776,7 +1004,7 @@ export const AkatuLandingPage = () => {
                     </div>
                   </div>
 
-                  <div className="grid flex-1 grid-cols-2 gap-4">
+                  <div className="grid flex-1 grid-cols-1 gap-4 sm:grid-cols-2">
                     <div className="rounded-[28px] border-4 border-[#25212B] bg-[#DDF2F4] p-4 shadow-[5px_5px_0_#25212B]">
                       <p className="text-[10px] font-black uppercase tracking-[0.22em] text-neutral-500">sala 01</p>
                       <p className="mt-3 text-xl font-black leading-tight text-[#25212B]">Brincar terapêutico</p>
@@ -813,7 +1041,7 @@ export const AkatuLandingPage = () => {
 
                   <div className="rounded-[26px] border-4 border-[#25212B] bg-[#25212B] p-5 text-white shadow-[7px_7px_0_#EF5B36]">
                     <p className="text-[11px] font-black uppercase tracking-[0.24em] text-[#FFD83D]">hoje na akatu</p>
-                    <p className="mt-2 text-lg font-extrabold leading-7">
+                    <p className="mt-2 text-xl font-extrabold leading-8 text-pretty">
                       Salas preparadas, materiais lúdicos e equipe alinhada para receber a criança por inteiro.
                     </p>
                   </div>
@@ -829,7 +1057,7 @@ export const AkatuLandingPage = () => {
                 <h2 className="mt-7 text-5xl font-black leading-tight tracking-tight text-white">
                   Um ponto tranquilo para receber crianças e famílias.
                 </h2>
-                <p className="mt-6 text-lg font-medium leading-8 text-white">
+                <p className="mt-6 text-xl font-medium leading-9 text-pretty text-white">
                   A Akatu fica na {ADDRESS_DISPLAY}, com uma proposta de chegada simples, acolhedora e organizada para a rotina das famílias.
                 </p>
                 <div className="mt-9 grid gap-4">
@@ -842,7 +1070,7 @@ export const AkatuLandingPage = () => {
                     }}>
                           <Icon className="h-6 w-6 text-[#25212B]" />
                         </div>
-                        <span className="text-sm font-extrabold text-[#25212B]">{item.text}</span>
+                        <span className="text-base font-extrabold leading-6 text-[#25212B]">{item.text}</span>
                       </>;
                   return item.href ? <a key={item.text} href={item.href} target={item.external ? '_blank' : undefined} rel={item.external ? 'noreferrer' : undefined} className={cardClassName}>
                         {content}
@@ -863,7 +1091,7 @@ export const AkatuLandingPage = () => {
                 />
                 <div className="absolute bottom-6 left-6 right-6 rounded-3xl border-4 border-[#25212B] bg-white p-5 shadow-[7px_7px_0_#EF5B36]">
                   <p className="text-base font-black text-[#25212B]">Akatu Desenvolvimento Infantil</p>
-                  <p className="mt-1 text-sm font-semibold text-neutral-600">{ADDRESS_DISPLAY}</p>
+                  <p className="mt-1 text-base font-semibold leading-6 text-neutral-600">{ADDRESS_DISPLAY}</p>
                   <a href={GOOGLE_MAPS_URL} target="_blank" rel="noreferrer" className="mt-4 inline-flex items-center gap-2 rounded-full border-2 border-[#25212B] bg-[#FFD83D] px-4 py-2 text-sm font-black text-[#25212B] transition hover:-translate-y-1 active:scale-[0.98]">
                     Abrir no Maps <ArrowRight className="h-4 w-4" />
                   </a>
@@ -879,62 +1107,76 @@ export const AkatuLandingPage = () => {
                 <h2 className="mt-7 max-w-xl text-4xl font-black leading-tight tracking-tight text-[#25212B] sm:text-5xl">
                   Respostas simples para chegar com mais segurança.
                 </h2>
-                <p className="mt-6 max-w-md text-base font-medium leading-8 text-neutral-600">
+                <p className="mt-6 max-w-md text-lg font-medium leading-8 text-pretty text-neutral-600">
                   Algumas dúvidas aparecem antes do primeiro contato. Aqui estão os pontos principais para entender como o cuidado acontece.
                 </p>
-                <a href={scheduleUrl} target="_blank" rel="noreferrer" className="mt-8 inline-flex min-h-11 items-center gap-3 rounded-2xl border-2 border-[#25212B] bg-[#FFD83D] px-6 py-3 text-sm font-extrabold text-[#25212B] shadow-[5px_5px_0_#25212B] transition-transform hover:-translate-y-1 focus:outline-none focus-visible:ring-4 focus-visible:ring-[#10B8C5]/40 active:scale-[0.96]">
-                  Tirar outra dúvida <ArrowRight className="h-4 w-4" />
-                </a>
-              </div>
+            </div>
 
               <div className="grid gap-5">
-                {faqs.map((item, index) => <details key={item.question} className="group rounded-[30px] border-4 border-[#25212B] bg-white p-0 shadow-[7px_7px_0_#25212B]" style={{
-                boxShadow: `7px 7px 0 ${item.color}`
-              }}>
-                    <summary className="flex min-h-16 cursor-pointer list-none items-center gap-4 px-5 py-5 text-left marker:hidden focus:outline-none focus-visible:ring-4 focus-visible:ring-[#10B8C5]/40 sm:px-6 [&::-webkit-details-marker]:hidden">
-                      <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl border-2 border-[#25212B] text-xs font-black tracking-widest text-[#25212B]" style={{
-                    backgroundColor: item.color
+                {faqs.map((item, index) => {
+                const isOpen = openFaqIndex === index;
+                const questionId = `faq-question-${index}`;
+                const answerId = `faq-answer-${index}`;
+
+                return <article key={item.question} className="overflow-hidden rounded-[30px] border-4 border-[#25212B] bg-white p-0 shadow-[7px_7px_0_#25212B]" style={{
+                  boxShadow: `7px 7px 0 ${item.color}`
+                }}>
+                    <h3>
+                      <button id={questionId} type="button" aria-expanded={isOpen} aria-controls={answerId} onClick={() => setOpenFaqIndex(currentIndex => currentIndex === index ? null : index)} className="flex min-h-16 w-full cursor-pointer items-center gap-4 px-5 py-5 text-left focus:outline-none focus-visible:ring-4 focus-visible:ring-[#10B8C5]/40 active:scale-[0.99] sm:px-6">
+                        <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl border-2 border-[#25212B] text-xs font-black tracking-widest text-[#25212B]" style={{
+                        backgroundColor: item.color
+                      }}>
+                          {String(index + 1).padStart(2, '0')}
+                        </span>
+                        <span className="min-w-0 flex-1 text-lg font-black leading-snug text-[#25212B] sm:text-xl">
+                          {item.question}
+                        </span>
+                        <span className={`grid h-11 w-11 shrink-0 place-items-center rounded-2xl border-2 border-[#25212B] bg-[#FFFDF8] transition-transform duration-300 ease-[cubic-bezier(0.2,0,0,1)] ${isOpen ? 'rotate-180' : 'rotate-0'}`}>
+                          <ChevronDown className="h-5 w-5 text-[#25212B]" />
+                        </span>
+                      </button>
+                    </h3>
+                    <div id={answerId} role="region" aria-labelledby={questionId} aria-hidden={!isOpen} className="akatu-faq-panel" style={{
+                    gridTemplateRows: isOpen ? '1fr' : '0fr',
+                    opacity: isOpen ? 1 : 0
                   }}>
-                        {String(index + 1).padStart(2, '0')}
-                      </span>
-                      <span className="min-w-0 flex-1 text-lg font-black leading-snug text-[#25212B] sm:text-xl">
-                        {item.question}
-                      </span>
-                      <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl border-2 border-[#25212B] bg-[#FFFDF8] transition-transform group-open:rotate-180">
-                        <ChevronDown className="h-5 w-5 text-[#25212B]" />
-                      </span>
-                    </summary>
-                    <div className="border-t-4 border-[#25212B] px-5 pb-6 pt-5 sm:px-6">
-                      <p className="max-w-3xl text-base font-medium leading-8 text-neutral-600">
-                        {item.answer}
-                      </p>
+                      <div className="overflow-hidden">
+                        <div className={`akatu-faq-answer border-t-4 border-[#25212B] px-5 pb-6 pt-5 sm:px-6 ${isOpen ? 'translate-y-0 blur-0' : '-translate-y-2 blur-[2px]'}`}>
+                          <p className="max-w-3xl text-lg font-medium leading-8 text-pretty text-neutral-600">
+                            {item.answer}
+                          </p>
+                        </div>
+                      </div>
                     </div>
-                  </details>)}
+                  </article>;
+              })}
               </div>
             </div>
           </section>
         </main>
 
-        <footer className="mx-auto max-w-[1180px] px-10 py-12">
-          <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
-            <LogoMark />
-            <div className="flex flex-wrap items-center gap-3">
-              {footerLinks.map(item => {
-              const Icon = item.icon;
-              return <a key={item.label} href={item.href} target={item.external ? '_blank' : undefined} rel={item.external ? 'noreferrer' : undefined} aria-label={item.label} className="grid h-14 w-14 place-items-center rounded-2xl border-4 border-[#25212B] bg-white text-[#25212B] shadow-[5px_5px_0_#25212B] transition hover:-translate-y-1 active:scale-[0.98]" style={{
-              backgroundColor: item.color
-            }}>
-                  <Icon className="h-6 w-6" />
-                </a>;
-            })}
+        <footer className="border-t-4 border-[#25212B] bg-[#DDF2F4]">
+          <div className="mx-auto max-w-[1180px] px-10 py-12">
+            <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
+              <LogoMark />
+              <div className="flex flex-wrap items-center gap-3">
+                {footerLinks.map(item => {
+                const Icon = item.icon;
+                return <a key={item.label} href={item.href} target={item.external ? '_blank' : undefined} rel={item.external ? 'noreferrer' : undefined} aria-label={item.label} className="grid h-14 w-14 place-items-center rounded-2xl border-4 border-[#25212B] bg-white text-[#25212B] shadow-[5px_5px_0_#25212B] transition hover:-translate-y-1 active:scale-[0.98]" style={{
+                backgroundColor: item.color
+              }}>
+                    <Icon className="h-6 w-6" />
+                  </a>;
+              })}
+              </div>
+            </div>
+            <div className="mt-8 flex items-center gap-3 border-t-2 border-[#25212B]/10 pt-5">
+              <span className="text-sm font-extrabold uppercase tracking-[0.1em] text-neutral-500">Made By:</span>
+              <a href="https://www.hcwebsolutions.com.br/" target="_blank" rel="noreferrer" aria-label="HC Web Solutions" className="grid h-12 w-12 place-items-center rounded-2xl border-2 border-[#25212B] bg-[#050505] p-1.5 shadow-[4px_4px_0_#10B8C5] transition-transform hover:-translate-y-1 focus:outline-none focus-visible:ring-4 focus-visible:ring-[#10B8C5]/40 active:scale-[0.96]">
+                <img src={hcWebSolutionsIcon} alt="" className="h-full w-full rounded-xl object-cover" />
+              </a>
             </div>
           </div>
-          <p className="mt-8 border-t-2 border-[#25212B]/10 pt-5 text-xs font-extrabold uppercase tracking-[0.18em] text-neutral-500">
-            Made By:{' '}
-            <a href="https://www.hcwebsolutions.com.br/" target="_blank" rel="noreferrer" className="text-[#25212B] underline decoration-[#10B8C5] decoration-2 underline-offset-4 transition-colors hover:text-[#10B8C5] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#10B8C5]/40">
-              https://www.hcwebsolutions.com.br/
-            </a>
-          </p>
         </footer>
       </div>
     </div>;
