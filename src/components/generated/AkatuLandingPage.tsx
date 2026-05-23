@@ -93,47 +93,69 @@ const professionals = [{
   detail: 'Trabalha oralidade, fala e linguagem com estratégias lúdicas para fortalecer a comunicação em diferentes contextos.'
 }] satisfies Professional[];
 const testimonials = [{
-  quote: 'Nota 5,0 nas avaliações públicas do Google.',
-  author: 'Google Reviews',
-  source: 'Ficha pública',
+  quote: 'Estrutura moderna e exemplar.',
+  author: 'Victor Candelori',
+  source: 'Google • 11 meses',
+  rating: 5,
   color: palette.yellow,
   tilt: 'lg:-rotate-3',
   offset: 'lg:translate-y-10'
 }, {
-  quote: 'Famílias destacam cuidado acolhedor e atenção no atendimento.',
-  author: 'Destaque das avaliações',
-  source: 'Google Reviews',
+  quote: 'A criança se sente confortável e acolhida.',
+  author: 'Lilian Diniz',
+  source: 'Google • 11 meses',
+  rating: 5,
   color: palette.teal,
   tilt: 'lg:rotate-2',
   offset: 'lg:-translate-y-4'
 }, {
-  quote: 'O espaço aparece como uma clínica infantil bem avaliada por responsáveis.',
-  author: 'Avaliação pública',
-  source: 'Google Reviews',
+  quote: 'Espaço incrível, com profissionais exemplares.',
+  author: 'Luisa Lira',
+  source: 'Google • 11 meses',
+  rating: 5,
   color: palette.coral,
   tilt: 'lg:-rotate-1',
   offset: 'lg:translate-y-16'
 }, {
-  quote: 'A equipe multidisciplinar é apresentada como ponto forte da experiência.',
-  author: 'Destaque das avaliações',
-  source: 'Google Reviews',
+  quote: 'Espaço muito bem estruturado, organizado e acolhedor.',
+  author: 'gaby diniz',
+  source: 'Google • 11 meses',
+  rating: 5,
   color: palette.yellow,
   tilt: 'lg:rotate-3',
   offset: 'lg:translate-y-2'
 }, {
-  quote: 'Atendimento infantil com terapia ocupacional, fonoaudiologia e psicologia.',
-  author: 'Espaço Akatu',
-  source: 'Google Maps',
+  quote: 'Equipe nota mil desde o primeiro contato.',
+  author: 'Izabella Gonçalves',
+  source: 'Google • 11 meses',
+  rating: 5,
   color: palette.teal,
   tilt: 'lg:-rotate-2',
   offset: 'lg:translate-y-12'
 }, {
-  quote: 'Avaliações reais podem ser conferidas diretamente na ficha do Google.',
-  author: 'Fonte pública',
-  source: 'Google Reviews',
+  quote: 'Extremamente aconchegante e preparado.',
+  author: 'Humberto Castro',
+  source: 'Google • 11 meses',
+  rating: 5,
   color: palette.coral,
   tilt: 'lg:rotate-1',
   offset: 'lg:-translate-y-2'
+}, {
+  quote: 'Profissionais muito capacitados.',
+  author: 'Isadora Teixeira Neto',
+  source: 'Google • 11 meses',
+  rating: 5,
+  color: palette.yellow,
+  tilt: 'lg:-rotate-2',
+  offset: 'lg:translate-y-8'
+}, {
+  quote: 'Espaço muito bom, completo, excelentes profissionais.',
+  author: 'sarah nonaka',
+  source: 'Google • 3 dias',
+  rating: 5,
+  color: palette.teal,
+  tilt: 'lg:rotate-2',
+  offset: 'lg:-translate-y-1'
 }];
 const specialties = [{
   type: 'occupation',
@@ -395,7 +417,7 @@ function ProfessionalVisual({
   index: number;
   imageFirst: boolean;
 }) {
-  return <figure className={`relative overflow-hidden rounded-[36px] border-4 border-[#25212B] bg-white p-4 shadow-[10px_10px_0_#25212B] ${imageFirst ? 'lg:order-1' : 'lg:order-2'}`} style={{
+  return <figure className={`relative w-full overflow-hidden rounded-[32px] border-4 border-[#25212B] bg-white p-3 shadow-[10px_10px_0_#25212B] sm:p-4 lg:max-w-[440px] xl:max-w-[460px] ${imageFirst ? 'lg:order-1 lg:justify-self-start' : 'lg:order-2 lg:justify-self-end'}`} style={{
     boxShadow: `10px 10px 0 ${person.color}`
   }}>
       <div className="absolute -right-12 -top-12 h-36 w-36 rounded-full border-4 border-[#25212B]" style={{
@@ -405,8 +427,8 @@ function ProfessionalVisual({
       <span className="absolute right-5 top-5 z-20 rounded-full border-2 border-[#25212B] bg-white px-4 py-2 text-xs font-black tracking-widest text-[#25212B]">
         {String(index + 1).padStart(2, '0')}
       </span>
-      <div className="relative grid min-h-[300px] place-items-center overflow-hidden rounded-[28px] border-4 border-[#25212B] bg-[#DDF2F4] sm:min-h-[360px] lg:min-h-[460px]">
-        {person.image ? <img src={person.image} alt={person.imageAlt ?? person.name} className="h-full min-h-[300px] w-full object-cover object-[52%_38%] sm:min-h-[360px] lg:min-h-[460px]" /> : <div role="img" aria-label={`Ilustração de ${person.name}`} className="grid h-full w-full place-items-center bg-[#FFFDF8]">
+      <div className="relative grid h-[330px] place-items-center overflow-hidden rounded-[24px] border-4 border-[#25212B] bg-[#DDF2F4] sm:h-[380px] sm:rounded-[28px] lg:h-[clamp(350px,46vh,400px)] xl:h-[clamp(370px,46vh,420px)]">
+        {person.image ? <img src={person.image} alt={person.imageAlt ?? person.name} className="h-full w-full object-cover object-[52%_38%]" /> : <div role="img" aria-label={`Ilustração de ${person.name}`} className="grid h-full w-full place-items-center bg-[#FFFDF8]">
             <div className="absolute left-8 top-8 h-20 w-20 rounded-full border-4 border-[#25212B] bg-[#FFD83D]" />
             <div className="absolute bottom-8 right-8 h-24 w-24 rounded-[28px] border-4 border-[#25212B]" style={{
           backgroundColor: person.color
@@ -430,7 +452,7 @@ function ProfessionalSpotlight({
   index: number;
 }) {
   const imageFirst = index % 2 === 0;
-  return <div key={person.name} className="akatu-professional-enter mt-10 grid min-h-[680px] grid-cols-1 items-center gap-8 sm:min-h-[650px] lg:min-h-[520px] lg:grid-cols-2 lg:gap-14">
+  return <div key={person.name} className="akatu-professional-enter mt-8 grid grid-cols-1 items-center gap-8 sm:mt-9 lg:mt-7 lg:grid-cols-2 lg:gap-12">
       <ProfessionalVisual person={person} index={index} imageFirst={imageFirst} />
       <article className={`relative ${imageFirst ? 'lg:order-2' : 'lg:order-1'}`}>
         <p className="text-xs font-black uppercase tracking-[0.26em]" style={{
@@ -444,13 +466,13 @@ function ProfessionalSpotlight({
         <p className="mt-4 text-base font-black uppercase tracking-[0.18em] text-[#25212B]">
           {person.role}
         </p>
-        <p className="mt-7 max-w-xl text-xl font-extrabold leading-9 text-pretty text-[#25212B]">
+        <p className="mt-5 max-w-xl text-xl font-extrabold leading-9 text-pretty text-[#25212B] lg:text-lg lg:leading-8 xl:text-xl xl:leading-9">
           {person.focus}
         </p>
-        <p className="mt-5 max-w-xl text-lg font-medium leading-8 text-pretty text-neutral-600">
+        <p className="mt-4 max-w-xl text-lg font-medium leading-8 text-pretty text-neutral-600 lg:text-base lg:leading-7 xl:text-lg xl:leading-8">
           {person.detail}
         </p>
-        <a href={makeWhatsAppUrl(`Olá, quero conhecer o perfil de ${person.name}.`)} target="_blank" rel="noreferrer" className="mt-8 inline-flex min-h-11 items-center gap-3 rounded-full border-2 border-[#25212B] bg-white px-5 py-3 text-sm font-black text-[#25212B] shadow-[5px_5px_0_#25212B] transition-transform hover:-translate-y-1 active:scale-[0.96]" style={{
+        <a href={makeWhatsAppUrl(`Olá, quero conhecer o perfil de ${person.name}.`)} target="_blank" rel="noreferrer" className="mt-6 inline-flex min-h-11 items-center gap-3 rounded-full border-2 border-[#25212B] bg-white px-5 py-3 text-sm font-black text-[#25212B] shadow-[5px_5px_0_#25212B] transition-transform hover:-translate-y-1 active:scale-[0.96]" style={{
         boxShadow: `5px 5px 0 ${person.color}`
       }}>
           Ver perfil <ArrowRight className="h-4 w-4" />
@@ -854,12 +876,12 @@ export const AkatuLandingPage = () => {
           <section ref={professionalsSectionRef} id="profissionais" className="akatu-professionals-section relative border-y-4 border-[#25212B] bg-[#E9F6FF]" style={{
           minHeight: `${(professionals.length + 1) * 100}vh`
         }}>
-            <div className="akatu-professionals-sticky sticky top-0 flex min-h-screen items-center overflow-hidden px-5 py-10 sm:px-10 lg:py-14">
+            <div className="akatu-professionals-sticky sticky top-0 flex min-h-screen items-center overflow-hidden px-5 py-8 sm:px-10 sm:py-10 lg:py-8 xl:py-10">
               <div className="mx-auto w-full max-w-[1180px]">
-                <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-end">
+                <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr] lg:items-end">
                   <div>
                     <SectionLabel>profissionais</SectionLabel>
-                    <h2 className="mt-7 max-w-2xl text-4xl font-black leading-tight tracking-tight text-[#25212B] sm:text-5xl">
+                    <h2 className="mt-5 max-w-2xl text-4xl font-black leading-tight tracking-tight text-[#25212B] sm:text-5xl">
                   Um grupo alinhado para olhar a criança por inteiro.
                     </h2>
                   </div>
@@ -867,7 +889,7 @@ export const AkatuLandingPage = () => {
                     <p className="max-w-md text-lg font-medium leading-8 text-pretty text-neutral-600">
                       Especialistas que constroem objetivos em conjunto, com devolutivas claras para pais, escola e rede de apoio.
                     </p>
-                    <div className="mt-5 flex flex-wrap gap-2" aria-label="Navegar entre profissionais">
+                    <div className="mt-4 flex flex-wrap gap-2" aria-label="Navegar entre profissionais">
                       {professionals.map((person, index) => {
                       const isActive = index === activeProfessionalIndex;
                       return <button key={person.name} type="button" onClick={() => scrollToProfessional(index)} aria-label={`Ver ${person.name}`} aria-current={isActive ? 'step' : undefined} className={`min-h-11 min-w-11 rounded-full border-2 border-[#25212B] px-3 text-xs font-black tracking-widest text-[#25212B] shadow-[3px_3px_0_#25212B] transition-transform hover:-translate-y-0.5 focus:outline-none focus-visible:ring-4 focus-visible:ring-[#10B8C5]/40 active:scale-[0.96] ${isActive ? 'bg-[#25212B] text-white' : 'bg-white'}`}>
@@ -926,7 +948,7 @@ export const AkatuLandingPage = () => {
                   O que as famílias percebem na Akatu.
                 </h2>
                 <p className="mt-5 text-xl font-medium leading-9 text-pretty text-neutral-600">
-                  Cards em movimento trazem destaques da ficha pública no Google, mantendo a leitura leve e o clima de brincadeira.
+                  Depoimentos reais da ficha pública no Google, com autor, nota e data exibida no painel.
                 </p>
                 <a href={GOOGLE_REVIEWS_URL} target="_blank" rel="noreferrer" className="mt-7 inline-flex min-h-11 items-center gap-2 rounded-full border-2 border-[#25212B] bg-[#FFD83D] px-5 py-3 text-sm font-black text-[#25212B] shadow-[5px_5px_0_#25212B] transition-transform hover:-translate-y-1 focus:outline-none focus-visible:ring-4 focus-visible:ring-[#10B8C5]/40 active:scale-[0.96]">
                   Ver reviews no Google <ArrowRight className="h-4 w-4" />
@@ -952,7 +974,12 @@ export const AkatuLandingPage = () => {
                           </div>
                           <span className="rounded-full border-2 border-[#25212B] bg-[#FFFDF8] px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-[#25212B]">review 0{cardIndex + 1}</span>
                         </div>
-                        <p className="mt-4 min-h-[128px] text-lg font-semibold leading-8 text-pretty text-[#25212B]">{item.quote}</p>
+                        <div className="mt-4 flex items-center gap-1" aria-label={`${item.rating} estrelas no Google`}>
+                          {Array.from({
+                        length: item.rating
+                      }).map((_, starIndex) => <Star key={starIndex} className="h-4 w-4 fill-[#FFD83D] text-[#25212B]" strokeWidth={2.2} />)}
+                        </div>
+                        <p className="mt-3 min-h-[112px] text-lg font-semibold leading-8 text-pretty text-[#25212B]">“{item.quote}”</p>
                         <div className="mt-5 flex items-center justify-between gap-4">
                           <p className="text-sm font-black uppercase tracking-[0.12em] text-neutral-500">{item.author}</p>
                           <p className="text-xs font-black uppercase tracking-[0.16em] text-[#EF5B36]">{item.source}</p>
