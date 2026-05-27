@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { ArrowRight, Calendar, CheckCircle2, ChevronDown, HeartHandshake, Instagram, Leaf, MapPin, MessageCircle, Phone, Puzzle, Quote, Sprout, Star, Sun } from 'lucide-react';
-import heroSprout from '../../assets/hero-sprout.png';
+import akatuHeroPhotoOne from '../../assets/akatu-hero-photo-1.png';
+import akatuHeroPhotoTwo from '../../assets/akatu-hero-photo-2.png';
+import akatuHeroPhotoThree from '../../assets/akatu-hero-photo-3.png';
 import hcWebSolutionsIcon from '../../assets/hc-web-solutions-icon.png';
 import nataliaPhoto from '../../assets/natalia-crop-source.png';
 const palette = {
@@ -11,6 +13,21 @@ const palette = {
   paper: '#FFFDF8',
   soft: '#F7F5F0'
 };
+const HERO_BACKGROUND_INTERVAL_MS = 6200;
+const HERO_MOBILE_MEDIA_QUERY = '(max-width: 767px)';
+const heroBackgroundPhotos = [{
+  src: akatuHeroPhotoOne,
+  desktopPosition: '58% 50%',
+  mobilePosition: '60% 50%'
+}, {
+  src: akatuHeroPhotoTwo,
+  desktopPosition: '52% 50%',
+  mobilePosition: '50% 50%'
+}, {
+  src: akatuHeroPhotoThree,
+  desktopPosition: '58% 50%',
+  mobilePosition: '39% 50%'
+}] as const;
 const PHONE_DISPLAY = '(31) 99559-0050';
 const WHATSAPP_NUMBER = '5531995590050';
 const INSTAGRAM_URL = 'https://www.instagram.com/espacoakatu?igsh=cmJueHJzcHNmazA5';
@@ -480,25 +497,55 @@ function ProfessionalSpotlight({
       </article>
     </div>;
 }
-function SeedHero() {
-  return <div className="relative -mr-4 mx-auto h-[460px] w-full max-w-[360px] overflow-visible sm:h-[560px] sm:max-w-[520px] lg:-mr-14 lg:h-[660px] lg:max-w-[650px]">
-      <div className="akatu-spin-slow absolute right-[-18px] top-[-14px] z-0 grid h-20 w-20 place-items-center rounded-full border-4 border-[#25212B] bg-[#FFD83D] shadow-[6px_6px_0_#25212B] sm:h-24 sm:w-24 lg:right-[-44px] lg:top-[-18px]">
-        <Sun className="h-9 w-9 text-[#25212B] sm:h-11 sm:w-11" strokeWidth={2.4} />
-      </div>
-      <div className="akatu-float absolute left-20 top-24 h-20 w-20 rounded-full border-4 border-[#25212B] bg-[#EF5B36]" />
-      <div className="akatu-wiggle absolute right-8 top-44 h-20 w-20 rounded-[26px] border-4 border-[#25212B] bg-[#10B8C5]" />
-      <img src={heroSprout} alt="Broto colorido saindo de uma semente" className="absolute bottom-[-12px] right-[-8px] h-[460px] w-auto object-contain drop-shadow-[10px_14px_0_rgba(37,33,43,0.12)] sm:h-[560px] lg:right-[-20px] lg:h-[660px]" />
-    
-      <div className="absolute bottom-8 left-0 z-20 max-w-[260px] rounded-[30px] border-4 border-[#25212B] bg-white px-5 py-4 shadow-[8px_8px_0_#10B8C5] sm:bottom-14 sm:left-[-26px] sm:max-w-[292px] sm:px-6 sm:py-5">
-        <p className="text-[11px] font-extrabold uppercase tracking-[0.24em] text-[#EF5B36]">sementes</p>
-          <p className="mt-2 text-[21px] font-black leading-[1.02] tracking-tight text-[#25212B] sm:text-[25px]">sementes para um mundo mais inclusivo e feliz</p>
-        <div className="mt-4 flex items-center gap-3">
-          <div className="grid h-10 w-10 place-items-center rounded-2xl border-2 border-[#25212B] bg-[#FFD83D]">
-            <Sprout className="h-6 w-6 text-[#25212B]" />
+function RotatingHeroBackground() {
+  const [activePhotoIndex, setActivePhotoIndex] = useState(0);
+  const [isMobileHero, setIsMobileHero] = useState(() => typeof window !== 'undefined' && window.matchMedia(HERO_MOBILE_MEDIA_QUERY).matches);
+
+  useEffect(() => {
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    if (motionQuery.matches) {
+      return;
+    }
+
+    const intervalId = window.setInterval(() => {
+      setActivePhotoIndex(currentIndex => (currentIndex + 1) % heroBackgroundPhotos.length);
+    }, HERO_BACKGROUND_INTERVAL_MS);
+
+    return () => window.clearInterval(intervalId);
+  }, []);
+
+  useEffect(() => {
+    const mobileQuery = window.matchMedia(HERO_MOBILE_MEDIA_QUERY);
+    const syncMobileFraming = () => setIsMobileHero(mobileQuery.matches);
+
+    syncMobileFraming();
+    mobileQuery.addEventListener('change', syncMobileFraming);
+
+    return () => mobileQuery.removeEventListener('change', syncMobileFraming);
+  }, []);
+
+  return <div className="absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
+      {heroBackgroundPhotos.map((photo, index) => <img key={photo.src} src={photo.src} alt="" loading={index === 0 ? 'eager' : 'lazy'} decoding="async" className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-[1400ms] ease-in-out ${activePhotoIndex === index ? 'opacity-100' : 'opacity-0'}`} style={{
+      objectPosition: isMobileHero ? photo.mobilePosition : photo.desktopPosition
+    }} />)}
+    </div>;
+}
+function SpecialtyCards() {
+  return <div className="grid w-full grid-cols-1 gap-7 md:grid-cols-3">
+      {specialties.map(specialty => <div key={specialty.title} className="group flex min-h-[190px] items-center gap-5 overflow-hidden rounded-[32px] border-4 border-[#25212B] bg-white p-6 shadow-[7px_7px_0_#25212B] transition hover:-translate-y-1" style={{
+      boxShadow: `8px 8px 0 ${specialty.color}`
+    }}>
+          <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-[28px] border-4 border-[#25212B] bg-[#FFFDF8] transition group-hover:rotate-6">
+            <SpecialtyIcon type={specialty.type} color={specialty.color} />
           </div>
-          <p className="text-[10px] font-extrabold uppercase tracking-wide text-neutral-500">do cuidado ao florescimento</p>
-        </div>
-      </div>
+          <div className="min-w-0">
+            <div className="text-[25px] font-black leading-[1.02] tracking-tight text-[#25212B]">
+              {specialty.lines.map(line => <span key={line} className="block">{line}</span>)}
+            </div>
+            <div className="mt-3 max-w-[210px] text-[13px] font-extrabold uppercase leading-5 tracking-[0.08em] text-neutral-500">{specialty.label}</div>
+          </div>
+        </div>)}
     </div>;
 }
 function FounderIllustration() {
@@ -803,20 +850,24 @@ export const AkatuLandingPage = () => {
         </header>
 
         <main>
-          <section className="relative mx-auto grid max-w-[1180px] grid-cols-1 items-center gap-16 px-5 pb-24 pt-12 sm:px-10 lg:grid-cols-[1fr_580px]">
-            <div className="absolute -left-16 top-32 hidden h-40 w-40 rounded-full border-4 border-[#25212B] bg-[#10B8C5] sm:block" />
-            <div className="absolute left-[48%] top-6 h-16 w-16 rounded-full border-4 border-[#25212B] bg-[#EF5B36]" />
-            <div className="relative z-10">
+          <section className="relative overflow-hidden border-y-4 border-[#25212B] bg-[#FFFDF8]">
+            <RotatingHeroBackground />
+            <div className="relative z-10 mx-auto flex min-h-[calc(100vh-132px)] max-w-[1180px] items-center px-5 py-16 sm:px-10">
+            <div className="relative z-10 max-w-3xl">
               <div className="mb-9 inline-flex max-w-xl items-center gap-3 rounded-3xl border-4 border-[#25212B] bg-white p-2 pr-5 shadow-[7px_7px_0_#FFD83D]">
                 <div className="grid h-12 w-12 place-items-center rounded-2xl border-2 border-[#25212B] bg-[#10B8C5]">
                   <Leaf className="h-6 w-6 text-white" />
                 </div>
                 <span className="text-base font-extrabold leading-6 text-[#25212B]">Desenvolvendo sementes para um mundo inclusivo e feliz.</span>
               </div>
-              <h1 className="max-w-3xl text-[52px] font-black leading-[0.92] tracking-tight text-[#25212B] sm:text-[64px] lg:text-[78px] lg:leading-[0.9]">
+              <h1 className="max-w-3xl text-[52px] font-black leading-[0.92] tracking-tight text-[#FFFDF8] sm:text-[64px] lg:text-[78px] lg:leading-[0.9]" style={{
+              textShadow: '0 4px 18px rgba(37, 33, 43, 0.78), 0 1px 1px rgba(37, 33, 43, 0.95)'
+            }}>
                 Um espaço vivo para a infância florescer.
               </h1>
-              <p className="mt-8 max-w-2xl text-xl font-medium leading-9 text-pretty text-neutral-600">
+              <p className="mt-8 max-w-2xl text-xl font-semibold leading-9 text-pretty text-white" style={{
+              textShadow: '0 3px 14px rgba(37, 33, 43, 0.78), 0 1px 1px rgba(37, 33, 43, 0.95)'
+            }}>
                 Terapia ocupacional, fonoaudiologia e psicologia em uma clínica infantil acolhedora, técnica e cheia de imaginação.
               </p>
               <div className="mt-10 flex flex-wrap items-center gap-5">
@@ -824,21 +875,12 @@ export const AkatuLandingPage = () => {
                 <SecondaryButton href="#profissionais">Ver profissionais</SecondaryButton>
               </div>
             </div>
-            <SeedHero />
-            <div className="relative z-20 -mt-8 grid w-full grid-cols-1 gap-7 md:grid-cols-3 lg:col-span-2">
-              {specialties.map(specialty => <div key={specialty.title} className="group flex min-h-[190px] items-center gap-5 overflow-hidden rounded-[32px] border-4 border-[#25212B] bg-white p-6 shadow-[7px_7px_0_#25212B] transition hover:-translate-y-1" style={{
-              boxShadow: `8px 8px 0 ${specialty.color}`
-            }}>
-                  <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-[28px] border-4 border-[#25212B] bg-[#FFFDF8] transition group-hover:rotate-6">
-                    <SpecialtyIcon type={specialty.type} color={specialty.color} />
-                  </div>
-                  <div className="min-w-0">
-                    <div className="text-[25px] font-black leading-[1.02] tracking-tight text-[#25212B]">
-                      {specialty.lines.map(line => <span key={line} className="block">{line}</span>)}
-                    </div>
-                    <div className="mt-3 max-w-[210px] text-[13px] font-extrabold uppercase leading-5 tracking-[0.08em] text-neutral-500">{specialty.label}</div>
-                  </div>
-                </div>)}
+            </div>
+          </section>
+
+          <section className="border-b-4 border-[#25212B] bg-[#FFFDF8] px-5 py-12 sm:px-10 lg:py-14" aria-label="Especialidades da Akatu">
+            <div className="mx-auto max-w-[1180px]">
+              <SpecialtyCards />
             </div>
           </section>
 
