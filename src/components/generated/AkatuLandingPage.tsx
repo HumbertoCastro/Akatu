@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { ArrowRight, Calendar, CheckCircle2, ChevronDown, HeartHandshake, Instagram, Leaf, MapPin, MessageCircle, Phone, Puzzle, Quote, Sprout, Star, Sun } from 'lucide-react';
-import akatuHeroPhotoOne from '../../assets/akatu-hero-photo-1.png';
-import akatuHeroPhotoTwo from '../../assets/akatu-hero-photo-2.png';
-import akatuHeroPhotoThree from '../../assets/akatu-hero-photo-3.png';
+import akatuHeroPhotoOne from '../../assets/foto 1.png';
+import akatuHeroPhotoTwo from '../../assets/foto 2.png';
+import akatuHeroPhotoThree from '../../assets/foto 3.png';
 import hcWebSolutionsIcon from '../../assets/hc-web-solutions-icon.png';
 import nataliaPhoto from '../../assets/natalia-crop-source.png';
 const palette = {
